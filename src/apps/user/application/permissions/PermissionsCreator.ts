@@ -14,7 +14,7 @@ export class PermissionCreatorUseCase
   constructor(private readonly permissionRepository: PermissionRepository) {}
 
   async execute(data: CreatePermissionDTO): Promise<void> {
-    const permission = await this.permissionRepository.find({
+    const permission = await this.permissionRepository.findOne({
       route: data.route,
     });
 

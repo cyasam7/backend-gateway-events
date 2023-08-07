@@ -1,11 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CqrsModule } from '@nestjs/cqrs';
-import { JwtModule, JwtService } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { IEnvConfig, config } from 'src/config';
 import { EMicroservices, EQueue } from 'src/global';
-import { JWTModule } from 'src/shared/modules/JWT.module';
+import { AuthGuard } from 'src/shared/guard/auth.guard';
 import { RabbitMQModule } from 'src/shared/modules/RabbitMQ.module';
 
 import { GetCurrentUserUseCase } from './application/auth/GetCurrentUser';
@@ -22,7 +20,7 @@ import { RoleGetOneUseCase } from './application/role/RoleGetById';
 import { RoleGetQueryUseCase } from './application/role/RoleGetQuery';
 import { RoleUpdateUseCase } from './application/role/RoleUpdate';
 import { UserCreatorUseCase } from './application/user/UserCreator';
-import { UserGetOneUseCase } from './application/user/UserGetById';
+import { UserGetByIdUseCase } from './application/user/UserGetById';
 import { UserGetQueryUseCase } from './application/user/UserGetQuery';
 import { UserRemoverUseCase } from './application/user/UserRemover';
 import { UserUpdaterUseCase } from './application/user/UserUpdater';
@@ -38,6 +36,7 @@ import { PermissionRepository } from './infrastructure/repository/permission.rep
 import { RoleRepository } from './infrastructure/repository/role.repository';
 import { UserRepository } from './infrastructure/repository/user.repository';
 import { EncryptService } from '../../shared/repositories/EncryptRepository';
+import { PermmissionGuard } from 'src/shared/guard/permission.guard';
 
 @Module({
   imports: [
@@ -73,7 +72,7 @@ import { EncryptService } from '../../shared/repositories/EncryptRepository';
 
     //USER
     UserCreatorUseCase,
-    UserGetOneUseCase,
+    UserGetByIdUseCase,
     UserGetQueryUseCase,
     UserUpdaterUseCase,
     UserRemoverUseCase,
@@ -89,6 +88,8 @@ import { EncryptService } from '../../shared/repositories/EncryptRepository';
     PermissionRepository,
     //UTILS
     EncryptService,
+    AuthGuard,
+    PermmissionGuard,
   ],
   exports: [],
 })

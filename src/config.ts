@@ -15,6 +15,7 @@ export interface IEnvConfig {
   SECRET_WORD: string;
   EXPIRATION_TIME_ACCESS_TOKEN: string;
   EXPIRATION_TIME_REFRESH_TOKEN: string;
+  FRONTEND_URL: string;
   SENDGRID_API_KEY: string;
   RABBIT_MQ_URI: string;
 }
@@ -28,6 +29,7 @@ export const joiSchemaEnv = Joi.object<IEnvConfig>({
   SECRET_WORD: Joi.string().required(),
   EXPIRATION_TIME_ACCESS_TOKEN: Joi.string().required(),
   EXPIRATION_TIME_REFRESH_TOKEN: Joi.string().required(),
+  FRONTEND_URL: Joi.string().required(),
   SENDGRID_API_KEY: Joi.string().required(),
   RABBIT_MQ_URI: Joi.string().uri().required(),
 });
@@ -42,6 +44,7 @@ export const config = registerAs('config', () => {
     SECRET_WORD: process.env.SECRET_WORD,
     EXPIRATION_TIME_ACCESS_TOKEN: process.env.EXPIRATION_TIME_ACCESS_TOKEN,
     EXPIRATION_TIME_REFRESH_TOKEN: process.env.EXPIRATION_TIME_REFRESH_TOKEN,
+    FRONTEND_URL: process.env.FRONTEND_URL,
     SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
     RABBIT_MQ_URI: process.env.RABBIT_MQ_URI,
   };

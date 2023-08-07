@@ -16,10 +16,11 @@ async function bootstrap(): Promise<void> {
   );
 
   const config = new DocumentBuilder()
-    .addBearerAuth()
+
     .setTitle('Events Api')
     .setDescription('Api para la gestión de eventos de una empresa')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

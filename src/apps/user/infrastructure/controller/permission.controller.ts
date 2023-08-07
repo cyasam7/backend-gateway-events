@@ -6,8 +6,14 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+
+import { Permission } from 'src/shared/decorators/routes-permission.decorator';
+import { AuthGuard } from 'src/shared/guard/auth.guard';
+import { PermmissionGuard } from 'src/shared/guard/permission.guard';
+import { ERoutesNamePermissions } from 'src/shared/RoutesPermission';
 
 import { PermissionGetOneUseCase } from '../../application/permissions/PermissionGetById';
 import { PermissionGetQueryUseCase } from '../../application/permissions/PermissionGetQuery';
@@ -21,6 +27,8 @@ import {
 } from '../dto/permission.dto';
 
 @ApiTags('Permission')
+@ApiBearerAuth()
+@UseGuards(AuthGuard)
 @Controller('/permission')
 export class PermissionController {
   constructor(
@@ -30,11 +38,15 @@ export class PermissionController {
     private readonly permissionGetQueryUseCase: PermissionGetQueryUseCase,
   ) {}
 
+  @Permission(ERoutesNamePermissions.PERMISSION_CREATE)
+  @UseGuards(PermmissionGuard)
   @Post('/')
   async create(@Body() data: CreatePermissionDTO): Promise<void> {
     return this.permissionCreatorUseCase.execute(data);
   }
 
+  @Permission(ERoutesNamePermissions.PERMISSION_FIND)
+  @UseGuards(PermmissionGuard)
   @Get('/')
   async getQuery(
     @Query() query: QueryPermissionDTO,
@@ -42,18 +54,18 @@ export class PermissionController {
     return this.permissionGetQueryUseCase.execute(query);
   }
 
+  @Permission(ERoutesNamePermissions.PERMISSION_FIND_ONE)
+  @UseGuards(PermmissionGuard)
   @Get('/:id')
   @ApiParam({ name: 'id', description: 'ID del usuario' })
-  @ApiResponse({ status: 200, description: 'Éxito' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   async getOne(@Param('id') id: string): Promise<PermissionEntity> {
     return this.permissionGetOneUseCase.execute(id);
   }
 
+  @Permission(ERoutesNamePermissions.PERMISSION_UPDATE)
+  @UseGuards(PermmissionGuard)
   @Patch('/:id')
   @ApiParam({ name: 'id', description: 'ID del usuario' })
-  @ApiResponse({ status: 200, description: 'Éxito' })
-  @ApiResponse({ status: 404, description: 'Usuario no encontrado' })
   async updateById(
     @Body() values: UpdatePermissionDTO,
     @Param('id') id: string,

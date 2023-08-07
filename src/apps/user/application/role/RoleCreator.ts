@@ -21,6 +21,7 @@ export class RoleCreatorUseCase implements IUseCase<CreateRoleDTO, void> {
     );
 
     const role = await this.roleRepository.findOne({ code: data.code });
+    console.log(role);
 
     if (role) {
       throw new BadRequestException('Ya existe un rol con ese codigo');

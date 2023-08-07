@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, In, Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import {
   IQueryPermission,
@@ -14,7 +14,6 @@ export class PermissionRepository implements IPermissionRepository {
   constructor(
     @InjectRepository(Permission)
     private permissionRepository: Repository<Permission>,
-    private dataSource: DataSource,
   ) {}
 
   async findMany(data: string[]): Promise<PermissionEntity[]> {
@@ -44,9 +43,17 @@ export class PermissionRepository implements IPermissionRepository {
     await this.permissionRepository.delete({ id });
   }
 
-  async findOne(values: Partial<IQueryPermission>): Promise<PermissionEntity> {
-    const permission = await this.permissionRepository.findOneBy({ ...values });
-    return new PermissionEntity({ ...permission });
+  async findOne(
+    values: Partial<IQueryPermission>,
+  ): Promise<PermissionEntity | null> {
+    try {
+      const permission = await this.permissionRepository.findOneByOrFail({
+        ...values,
+      });
+      return new PermissionEntity({ ...permission });
+    } catch {
+      return null;
+    }
   }
 
   async find(values: Partial<IQueryPermission>): Promise<PermissionEntity[]> {

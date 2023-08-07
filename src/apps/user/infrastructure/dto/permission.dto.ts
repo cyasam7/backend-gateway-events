@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
-import { ERoutesNamePermissions } from '../../domain/entity/RoutesPermission';
+import { ERoutesNamePermissions } from '../../../../shared/RoutesPermission';
 
 export class CreatePermissionDTO {
   @IsNotEmpty()

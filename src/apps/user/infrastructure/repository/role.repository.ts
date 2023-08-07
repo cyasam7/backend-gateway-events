@@ -19,7 +19,7 @@ export class RoleRepository implements IRoleRepository {
 
   async findOne(values: Partial<IQueryRole>): Promise<RoleEntity | null> {
     try {
-      const role = await this.roleRepository.findOne({
+      const role = await this.roleRepository.findOneOrFail({
         where: values,
         relations: { permissions: true },
       });
