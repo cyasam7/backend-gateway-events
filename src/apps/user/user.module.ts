@@ -27,7 +27,7 @@ import { UserUpdaterUseCase } from './application/user/UserUpdater';
 import { NotificationRegisterEventHandler } from './domain/events';
 import { AuthController } from './infrastructure/controller/auth.controller';
 import { PermissionController } from './infrastructure/controller/permission.controller';
-import { RoleController } from './infrastructure/controller/role.controller copy';
+import { RoleController } from './infrastructure/controller/role.controller';
 import { UserController } from './infrastructure/controller/user.controller';
 import { Permission } from './infrastructure/entities/permission.entity';
 import { Role } from './infrastructure/entities/role.entity';

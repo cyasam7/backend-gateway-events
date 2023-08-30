@@ -7,7 +7,9 @@ import { AppModule } from './app.module';
 console.log(process.env.RABBIT_MQ_URI);
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    cors: { origin: ['http://localhost:5173', 'http://localhost:3000'] },
+  });
 
   app.useGlobalPipes(
     new ValidationPipe({

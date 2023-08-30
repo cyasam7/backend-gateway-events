@@ -1,5 +1,15 @@
-import { Body, Controller, Get, Headers, Post } from '@nestjs/common';
-import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiBearerAuth, ApiHeader, ApiTags } from '@nestjs/swagger';
+
+import { AuthGuard } from 'src/shared/guard/auth.guard';
 
 import { GetCurrentUserUseCase } from '../../application/auth/GetCurrentUser';
 import { LoginUserUseCase } from '../../application/auth/LoginUser';
@@ -27,15 +37,14 @@ export class AuthController {
     return this.loginUserUseCase.execute(data);
   }
 
-  @ApiHeader({
-    name: 'access_token',
-    description: 'Access Token Header',
-  })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get('/me')
-  async currentUser(
-    @Headers('access_token') accessToken: string,
-  ): Promise<any> {
-    return this.getCurrentUserUseCase.execute(accessToken);
+  async currentUser(@Request() req): Promise<any> {
+    return this.getCurrentUserUseCase.execute({
+      token: req.user.accessToken,
+      refreshToken: req.user.refreshToken,
+    });
   }
 
   @ApiHeader({
